@@ -9,10 +9,7 @@ object Project {
     val loggedInEmployee = EmployeeManagement.warehouseLogin()
 
     /**  need to change **/
-
-
-
-
+    //val product11 = Product.products.find(_.productID == "0001")
 
     val product0 = new Product("0001", "Dagumi Fujiwara Gnome", "£8.60", "The Dagumi Fujiwara Gnome is the fastest downhill drift racer!", "AE86", false, 86)
     val product1 = new Product("0002", "Keisuke Takahashi Gnome", "£7.00", "The Keisuke Takahashi Gnome is the fastest up-hill drift racer!", "RX07", false, 70)
@@ -20,6 +17,11 @@ object Project {
     val product3 = new Product("0004", "Biggie Smalls Gnome", "£3.13", "The most gangsta gnome that ever lived. R.I.P.", "AA02", true, 313)
 
     val arrayOfAllProducts:Array[Product] = new Array[Product](4)
+
+    arrayOfAllProducts(0) = product0
+    arrayOfAllProducts(1) = product1
+    arrayOfAllProducts(2) = product2
+    arrayOfAllProducts(3) = product3
 
     /** Array of orders with products **/
     val productOrders:Array[ProductOrderList] = new Array[ProductOrderList](4)
@@ -75,8 +77,6 @@ object Project {
     val purchaseOrders:Array[PurchaseOrderList] = new Array[PurchaseOrderList](4)
 
     /** Purchase Order products **/
-
-
 
     val purchaseOrderProducts0:Array[Product] = new Array[Product](100)
     val purchaseOrderProducts1:Array[Product] = new Array[Product](200)
@@ -211,7 +211,6 @@ object Project {
   def sendMessageToAccounts(): Unit =
   {
     println("Sending stock list to accounts")
-
   }
 
   def updateInventoryFromPurchaseOrder(allProductsArray: Array[Product],loggedEmp: String, purchaseOrderArray: Array[PurchaseOrderList]): Unit =
@@ -453,12 +452,12 @@ object Project {
   {
     for ( i <- 0 to (productArray.length - 1))
     {
-/**      println("Product ID : " + productArray(i).productID)
+      println("Product ID : " + productArray(i).productID)
       println("Product Name : " + productArray(i).productName)
       println("Product Location : " + productArray(i).productLocation)
       println("Porousware needed : " + productArray(i).porouswareNeeded)
       println("Stock Level : " + productArray(i).stockLevel)
-**/
+
       println()
     }
   }

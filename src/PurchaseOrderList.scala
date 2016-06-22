@@ -1,7 +1,7 @@
 /**
   * Created by Administrator on 17/06/2016.
   */
-case class PurchaseOrderList(val purchaseOrderID: String, val purchasedProducts: Array[Product], val costOfPurchaseOrder: String, val purchaseOrderStatus: String) {
+class PurchaseOrderList(val purchaseOrderID: String, val purchasedProducts: Array[Product], val costOfPurchaseOrder: String, val purchaseOrderStatus: String) {
 
   def increaseStockLevels(allProds: Array[Product]): Unit ={
 

@@ -1,6 +1,6 @@
 /**
   * Created by Administrator on 17/06/2016.
-  */
+  **/
 class ProductOrderList(override val orderID: String, override val customerID: String, override val customerName: String, override val customerAddress: String, val products: Array[Product], var checkedOutStatus : Boolean, var checkedOutBy: String, var orderStatus: String) extends Order(orderID, customerID, customerName, customerAddress) {
 
 
@@ -9,9 +9,7 @@ class ProductOrderList(override val orderID: String, override val customerID: St
     productOrders("1791", "0002", "Rytis the Grebe Murderer", "Prison",getCustomerProducts()/**products rytisProductOrder**/,false,"",""),
     productOrders("1420", "0003", "Snoop Lion", "Bakersfield, CA, USA" ,getCustomerProducts()/**products snoopLionsProductOrder**/,false,"",""))**/
 
-  var productOrders = Seq("1086", "0001", "Dagumi Fujiwara", "86 Akina, Mount Haruna, Japan",getCustomerProducts()/**products dagumisProductOrder**/,false,"","")
-
-
+  //var productOrders = Seq("1086", "0001", "Dagumi Fujiwara", "86 Akina, Mount Haruna, Japan", products/**getCustomerProducts()products dagumisProductOrder**/,false,"","")
 
   val x = orderID
   val y = customerID
@@ -159,3 +157,4 @@ class ProductOrderList(override val orderID: String, override val customerID: St
     }
   }
 }
+//**/

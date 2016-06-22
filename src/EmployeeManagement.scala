@@ -5,9 +5,10 @@ object EmployeeManagement {
   def warehouseLogin(): String ={
     println("Login - Enter your Name or Employee ID")
     println()
-    val employee = WarehouseEmployee.findById(scala.io.StdIn.readLine()).get
-    if(employee.employeeID.isEmpty)
+    val employee = WarehouseEmployee.advancedFind(scala.io.StdIn.readLine()).get
+
+    if(employee.employeeID.isEmpty || employee.employeeName.isEmpty)
       warehouseLogin()
-    employee.employeeID
+    employee.employeeName
   }
 }
