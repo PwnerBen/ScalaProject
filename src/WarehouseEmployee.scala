@@ -5,7 +5,7 @@ case class WarehouseEmployee(val employeeID: String, val employeeName: String, v
 
 object WarehouseEmployee {
 
-  var warehouseEmployees = Seq(WarehouseEmployee("0001", "Bunta Fujiwara",/**ihatetofu**/"a", "Subaru Impreza WRX STI Coupe Type R"),
+  var warehouseEmployees = Array(WarehouseEmployee("0001", "Bunta Fujiwara",/**ihatetofu**/"a", "Subaru Impreza WRX STI Coupe Type R"),
     WarehouseEmployee("0002", "Shingo Shoji","NightKids", "Honda Civic SiR II EG6"))
 
   def findById(employeeID : String) = warehouseEmployees.find(_.employeeID == employeeID)

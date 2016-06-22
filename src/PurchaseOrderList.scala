@@ -1,24 +1,26 @@
 /**
   * Created by Administrator on 17/06/2016.
   */
-class PurchaseOrderList(val purchaseOrderID: String, val purchasedProducts: Array[Product], val costOfPurchaseOrder: String, val purchaseOrderStatus: String) {
+case class PurchaseOrderList(val purchaseOrderID: String, val purchasedProducts: Array[Product], val costOfPurchaseOrder: String, val purchaseOrderStatus: String)
+
+  object PurchaseOrderList{
 
   def increaseStockLevels(allProds: Array[Product]): Unit ={
 
 
   }
 
-  def purchaseOrderInformation(): Unit =
+  def purchaseOrderInformation(purchaseOrderList: PurchaseOrderList): Unit =
   {
-    println("Purchase Order ID : " + purchaseOrderID)
+    println("Purchase Order ID : " + purchaseOrderList.purchaseOrderID)
     println("Items in Purchase Order")
     println()
 
-    println("Purchase Order Cost : " + costOfPurchaseOrder)
-    println("Purchase Order Status : " + purchaseOrderStatus)
+    println("Purchase Order Cost : " + purchaseOrderList.costOfPurchaseOrder)
+    println("Purchase Order Status : " + purchaseOrderList.purchaseOrderStatus)
   }
 
-  def getPurchaseOrderProductsAndAmounts(allProds: Array[Product]): Unit =
+  def getPurchaseOrderProductsAndAmounts(purchaseOrderList: PurchaseOrderList, allProds: Array[Product]): Unit =
   {
     var allProductsCheck:Array[String] = new Array[String](4)
 
@@ -38,9 +40,9 @@ class PurchaseOrderList(val purchaseOrderID: String, val purchasedProducts: Arra
     {
       //println(allProductsCheck(j))
 
-      for(i <- 0 to (purchasedProducts.length - 1))
+      for(i <- 0 to (purchaseOrderList.purchasedProducts.length - 1))
       {
-        if(purchasedProducts(i).productID == allProductsCheck(j))
+        if(purchaseOrderList.purchasedProducts(i).productID == allProductsCheck(j))
         {
           productCount(j) = productCount(j) + 1
           //println(productCount(j))

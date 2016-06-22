@@ -8,72 +8,44 @@ object Project {
     println()
     val loggedInEmployee = EmployeeManagement.warehouseLogin()
 
-    /**  need to change **/
-    //val product11 = Product.products.find(_.productID == "0001")
-
-    val product0 = new Product("0001", "Dagumi Fujiwara Gnome", "£8.60", "The Dagumi Fujiwara Gnome is the fastest downhill drift racer!", "AE86", false, 86)
+    /**val product0 = new Product("0001", "Dagumi Fujiwara Gnome", "£8.60", "The Dagumi Fujiwara Gnome is the fastest downhill drift racer!", "AE86", false, 86)
     val product1 = new Product("0002", "Keisuke Takahashi Gnome", "£7.00", "The Keisuke Takahashi Gnome is the fastest up-hill drift racer!", "RX07", false, 70)
     val product2 = new Product("0003", "Penguin Gnome", "£3.00", "The Penguin Gnome is the coolest gnome around!", "AA01", false, 300)
-    val product3 = new Product("0004", "Biggie Smalls Gnome", "£3.13", "The most gangsta gnome that ever lived. R.I.P.", "AA02", true, 313)
+    val product3 = new Product("0004", "Biggie Smalls Gnome", "£3.13", "The most gangsta gnome that ever lived. R.I.P.", "AA02", true, 313)**/
 
-    val arrayOfAllProducts:Array[Product] = new Array[Product](4)
+    /**val arrayOfAllProducts:Array[Product] = new Array[Product](4)
 
-    arrayOfAllProducts(0) = product0
-    arrayOfAllProducts(1) = product1
-    arrayOfAllProducts(2) = product2
-    arrayOfAllProducts(3) = product3
+    arrayOfAllProducts(0) = Product.findById("0001").get
+    arrayOfAllProducts(1) = Product.findById("0002").get
+    arrayOfAllProducts(2) = Product.findById("0003").get
+    arrayOfAllProducts(3) = Product.findById("0004").get/**/
+
+    println(AllProducts.arrayOfAllProducts(0).productName)
+    println(AllProducts.arrayOfAllProducts(1).productName)
+    println(AllProducts.arrayOfAllProducts(2).productName)
+    println(AllProducts.arrayOfAllProducts(3).productName)**/
+
 
     /** Array of orders with products **/
-    val productOrders:Array[ProductOrderList] = new Array[ProductOrderList](4)
+    //val productOrders:Array[ProductOrderList] = new Array[ProductOrderList](4)
 
-    /** Customers products **/
-    val dagumisProductOrder:Array[Product] = new Array[Product](25)
-
-    for ( i <- 0 to (dagumisProductOrder.length - 1))
-    {
-      dagumisProductOrder(i) = product0
-    }
-
-    val keisukesProductOrder:Array[Product] = new Array[Product](25)
-
-    for ( i <- 0 to (keisukesProductOrder.length - 1))
-    {
-      keisukesProductOrder(i) = product1
-    }
-
-    val rytisProductOrder:Array[Product] = new Array[Product](5)
-
-    for ( i <- 0 to (4))
-    {
-      rytisProductOrder(i) = product2
-    }
-
-    val snoopLionsProductOrder:Array[Product] = new Array[Product](2)
-
-    for ( i <- 0 to (1))
-    {
-      snoopLionsProductOrder(i) = product3
-    }
-
-    /**
-      **/
 
     /** Adding customer's product order to product order list **/
 
-    val customerProductOrder0 = new ProductOrderList("1086", "0001", "Dagumi Fujiwara", "86 Akina, Mount Haruna, Japan",dagumisProductOrder,false,"","")
+   /** val customerProductOrder0 = new ProductOrderList("1086", "0001", "Dagumi Fujiwara", "86 Akina, Mount Haruna, Japan",dagumisProductOrder,false,"","")
     val customerProductOrder1 = new ProductOrderList("1007", "0007", "Keisuke Takahashi", "86 Akina, Mount Haruna, Japan",keisukesProductOrder,false,"","")
     val customerProductOrder2 = new ProductOrderList("1791", "0002", "Rytis the Grebe Murderer", "Prison",rytisProductOrder,false,"","")
     val customerProductOrder3 = new ProductOrderList("1420", "0003", "Snoop Lion", "Bakersfield, CA, USA" ,snoopLionsProductOrder,false,"","")
 
-    productOrders(0) = customerProductOrder0
-    productOrders(1) = customerProductOrder1
-    productOrders(2) = customerProductOrder2
-    productOrders(3) = customerProductOrder3
+    ProductOrderList.productOrders(0) = customerProductOrder0
+    ProductOrderList.productOrders(1) = customerProductOrder1
+    ProductOrderList.productOrders(2) = customerProductOrder2
+    ProductOrderList.productOrders(3) = customerProductOrder3**/
 
     /** purchase order ID, status, products, cost of purchase order **/
 
     /** Array of purchase orders **/
-
+    /**
     val purchaseOrders:Array[PurchaseOrderList] = new Array[PurchaseOrderList](4)
 
     /** Purchase Order products **/
@@ -91,19 +63,19 @@ object Project {
     def populateArray(array: Array[Product]): Unit ={
       for ( i <- 0 to array.length / 4)
       {
-        array(i) = product0
+        array(i) = Product.findById("0001").get
       }
       for ( i <- ((array.length / 4) + 1) to (array.length / 2))
       {
-        array(i) = product1
+        array(i) = Product.findById("0002").get
       }
       for ( i <- ((array.length / 2) + 1) to (array.length - (array.length / 4)))
       {
-        array(i) = product2
+        array(i) = Product.findById("0003").get
       }
       for ( i <- ((array.length - (array.length / 4)) + 1) to array.length - 1)
       {
-        array(i) = product3
+        array(i) = Product.findById("0004").get
       }
     }
 
@@ -115,7 +87,7 @@ object Project {
     purchaseOrders(0) = purchaseOrder0
     purchaseOrders(1) = purchaseOrder1
     purchaseOrders(2) = purchaseOrder2
-    purchaseOrders(3) = purchaseOrder3
+    purchaseOrders(3) = purchaseOrder3**/
 
     var continue = true
 
@@ -132,11 +104,11 @@ object Project {
       choiceInput match {
         case "1" => println("Loading Orders...")
           println()
-          NbGardensOrderList(productOrders, loggedInEmployee)
+          NbGardensOrderList(ProductOrderList.productOrders, loggedInEmployee)
 
         case "2" => println("Loading Stock...")
           println()
-          stockManagement(arrayOfAllProducts,productOrders,loggedInEmployee,purchaseOrders)
+          stockManagement(AllProducts.arrayOfAllProducts,ProductOrderList.productOrders,loggedInEmployee,PurchaseOrders.purchaseOrders)
 
         case "3" => println("Goodbye " + loggedInEmployee + "!")
           continue = false
@@ -233,8 +205,10 @@ object Project {
   {
     for ( i <- 0 to (purchaseOrderArray.length - 1))
     {
-      purchaseOrderArray(i).purchaseOrderInformation()
-      purchaseOrderArray(i).getPurchaseOrderProductsAndAmounts(allProds)
+
+      PurchaseOrderList.purchaseOrderInformation(purchaseOrderArray(i))
+      PurchaseOrderList.getPurchaseOrderProductsAndAmounts(purchaseOrderArray(i),allProds)
+
       println()
     }
   }
@@ -288,7 +262,12 @@ object Project {
             println("Order " + pArray(i).orderID)
             println()
             println("Products")
-            pArray(i).getProductsAndAmounts(allProductsArray)
+
+            //pArray(i).getProductsAndAmounts(allProductsArray)
+
+            //pArray(i).products
+
+            ProductOrderList.getProductsAndAmounts(pArray(i),allProductsArray)
           }
         }
 
@@ -308,7 +287,9 @@ object Project {
             if ((loggedEmp == pArray(i).checkedOutBy) && userInputOrderID == pArray(i).orderID && (pArray(i).orderStatus == "Pending")) // check if it has been checked out by employee
             {
               // and if the user input was one of their orders
-              pArray(i).decrementStockLevels(allProductsArray) // decrement levels for that product order
+              //pArray(i).decrementStockLevels(allProductsArray)
+
+              ProductOrderList.decrementStockLevels(pArray(i),allProductsArray) // decrement levels for that product order
               pArray(i).orderStatus = "Completed"
               found = true
 
@@ -610,7 +591,7 @@ object Project {
   {
     for ( i <- 0 to (pArray.length - 1))
     {
-      println(pArray(i).getOrderID() + " " + pArray(i).getCustomerName())
+      println(pArray(i).orderID + " " + pArray(i).customerName)
       println()
     }
   }
@@ -621,18 +602,29 @@ object Project {
 
     for ( i <- 0 to (pArray.length - 1)) {
 
-      if (userInput == pArray(i).getOrderID()){
+      if (userInput == pArray(i).orderID){
 
         println("Order " + userInput + " found!")
         println()
         found = true
 
-        pArray(i).printOrderInformation()
-        if (showCustomerProducts) {
-          pArray(i).getCustomerProducts()
-        }
-        pArray(i).getStatus()
+        println("Order ID : " + pArray(i).orderID)
+        println("Customer ID : " + pArray(i).customerID)
+        println("Customer Name : " + pArray(i).customerName)
+        println("Customer Address : " + pArray(i).customerAddress)
 
+        if (showCustomerProducts) {
+            ProductOrderList.getCustomerProducts(pArray(i))
+        }
+
+        if (pArray(i).checkedOutBy == "") {
+          println("Order Checked out : " + pArray(i).checkedOutStatus)
+          println
+        }
+        else {
+          println("Order Checked out by " + pArray(i).checkedOutBy)
+          println()
+        }
       }
     }
 
@@ -659,7 +651,7 @@ object Project {
       if (loggedInEmp == pArray(i).checkedOutBy)
       {
         x = x + 1
-        println(x + " - Order ID - " + pArray(i).getOrderID() + " Customer Name - " + pArray(i).getCustomerName())
+        println(x + " - Order ID - " + pArray(i).orderID + " Customer Name - " + pArray(i).customerName)
 
       }
     }
@@ -673,7 +665,7 @@ object Project {
   {
     for ( i <- 0 to (pArray.length - 1)) {
 
-      if (userInput == pArray(i).getOrderID()){
+      if (userInput == pArray(i).orderID) {
 
         if((pArray(i).checkedOutStatus == false) && (pArray(i).orderStatus != "Pending")){
 
@@ -682,7 +674,7 @@ object Project {
           pArray(i).orderStatus = "Pending"
 
           println()
-          println("Order - " + pArray(i).getOrderID() + " Checked out!")
+          println("Order - " + pArray(i).orderID + " Checked out!")
           println()
         }
         else if(pArray(i).checkedOutBy == loggedInEmp)
