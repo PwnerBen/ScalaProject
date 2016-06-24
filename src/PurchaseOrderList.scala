@@ -1,18 +1,63 @@
 /**
   * Created by Administrator on 17/06/2016.
   */
-case class PurchaseOrderList(val purchaseOrderID: String, val purchasedProducts: Array[Product], val costOfPurchaseOrder: String, val purchaseOrderStatus: String)
+case class PurchaseOrderList(val purchaseOrderID: String, val purchasedProducts: Array[Product], val costOfPurchaseOrder: String, var purchaseOrderStatus: String)
 
   object PurchaseOrderList{
 
-  def increaseStockLevels(allProds: Array[Product]): Unit ={
 
+    def increaseStockLevels(purchaseOrderList: PurchaseOrderList,allProds: Array[Product]): Unit = {
 
-  }
+      /**
+        * with the chosen purchase order.
+        * get every product and amount
+        * for each product add amount to stock.
+        **/
+
+      var allProductsCheck: Array[String] = new Array[String](4)
+
+      //val products : Array[Product] = productOrders.find(_.products == products).get.products
+
+      for (x <- 0 to (allProds.length - 1)) {
+        allProductsCheck(x) = allProds(x).productID
+      }
+
+      var productCount: Array[Int] = new Array[Int](4)
+
+      for (i <- 0 to (productCount.length - 1)) {
+
+        productCount(i) = 0
+      }
+
+      for (j <- 0 to (allProductsCheck.length - 1)) // 0 - 4
+      {
+        for (i <- 0 to (purchaseOrderList.purchasedProducts.length - 1)) // 0 - 25
+        {
+          if (purchaseOrderList.purchasedProducts(i).productID == allProductsCheck(j)) {
+            productCount(j) = productCount(j) + 1 //for each product it checks how much of each product is in the order
+          }
+        }
+
+        if (productCount(j) == 0) {
+
+        }
+        else if (productCount(j) > 0) {
+          println()
+
+          println("Adding " + productCount(j) + " " + allProds(j).productName + "'s to the Inventory System.")
+
+          println("Old stock level - " + allProds(j).stockLevel)
+          allProds(j).stockLevel = allProds(j).stockLevel + productCount(j)
+          println("New stock level - " + allProds(j).stockLevel)
+
+          purchaseOrderList.purchaseOrderStatus = "Received"
+        }
+      }
+    }
 
   def purchaseOrderInformation(purchaseOrderList: PurchaseOrderList): Unit =
   {
-    println("Purchase Order ID : " + purchaseOrderList.purchaseOrderID)
+    println(Console.RED + "Purchase Order ID : " + purchaseOrderList.purchaseOrderID + Console.RESET)
     println("Items in Purchase Order")
     println()
 
@@ -61,7 +106,6 @@ case class PurchaseOrderList(val purchaseOrderID: String, val purchasedProducts:
         println()
 
         println("Amount - " + productCount(j))
-        println()
       }
     }
   }

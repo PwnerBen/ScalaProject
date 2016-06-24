@@ -12,6 +12,8 @@ object WarehouseEmployee {
 
   def findByName(employeeName: String) = warehouseEmployees.find(_.employeeName == employeeName)
 
+  def findByPassword(employeePass: String) = warehouseEmployees.find(_.employeePassword == employeePass)
+
   def advancedFind(key: String) ={
     if(findById(key).nonEmpty) findById(key)
     else findByName(key)

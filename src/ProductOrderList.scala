@@ -16,7 +16,9 @@ case class ProductOrderList(override val orderID: String, override val customerI
       ProductOrderList("1791", "0002", "Rytis the Grebe Murderer", "Prison", ProductOrders.rytisProductOrder, false, "", ""),
       ProductOrderList("1420", "0003", "Snoop Lion", "Bakersfield, CA, USA", ProductOrders.snoopLionsProductOrder, false, "", ""))
 
-    def findByOrderId(orderID: String) = productOrders.find(_.orderID == orderID)
+    def findByOrderID(orderID: String) = productOrders.find(_.orderID == orderID)
+
+    def findByCheckedOutBy(checkedOutBy: String) = productOrders.find(_.checkedOutBy == checkedOutBy)
 
     /**val x = orderID
     val y = customerID
@@ -166,7 +168,11 @@ case class ProductOrderList(override val orderID: String, override val customerI
         println("Order Checked out by " + checkedOutBy)
         println()
       }
+
     }**/
+
+
+
   }
 
 

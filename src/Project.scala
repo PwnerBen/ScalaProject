@@ -1,14 +1,12 @@
-object Project {
+import com.sun.javafx.image.BytePixelSetter
+
+object Project extends MessageFormating{
 
   def main(args: Array[String]) {
     println("NB GARDENS WAREHOUSE ORDER TRACKING SYSTEM")
     println()
 
-    println("Please enter your login password.")
-    println()
-    val loggedInEmployee = EmployeeManagement.warehouseLogin()
-
-    mainMenu(loggedInEmployee)
+    EmployeeManagement.warehouseLogin()
 
   }
 
@@ -17,10 +15,7 @@ object Project {
     println()
     println("What are you trying to manage?")
 
-    println(" 1 - Orders")
-    println(" 2 - Stock")
-    println(" 3 - Exit")
-    println()
+    BuildMenu("Orders","Stock","Exit")
 
     val choiceInput = scala.io.StdIn.readLine()
     choiceInput match {
@@ -50,15 +45,9 @@ object Project {
     }
 
     println("What would you like to do with the Stock System?")
-    println()
-    println(" 1 - Decrement stock levels from checked out order(s) ")
-    println(" 2 - Update Inventory System from purchase order(s) ")
-    println(" 3 - Inform accounts of received purchase order(s) ")
-    println(" 4 - Show / Hide Stock List")
-    println(" 5 - Find a product ")
-    println(" 6 - See what items need porousware from received purchase order(s)")
-    println(" 7 - Go back")
-    println()
+
+    BuildMenu("Decrement stock levels from checked out order(s) ","Update Inventory System from purchase order(s) ","Inform accounts of received purchase order(s) ","Show / Hide Stock List ",
+      "Find a product ","See what items need porousware from received purchase order(s)","Go back")
 
     val stockChoice = scala.io.StdIn.readLine()
 
@@ -69,7 +58,7 @@ object Project {
 
       case "2" => println("Loading Inventory System...")
 
-        updateInventoryFromPurchaseOrder(productArray,loggedEmp,purchaseOrderArray)
+        updateInventoryFromPurchaseOrder(productArray, pArray,loggedEmp,purchaseOrderArray)
 
         println()
 
@@ -108,28 +97,111 @@ object Project {
     println("Sending stock list to accounts")
   }
 
-  def updateInventoryFromPurchaseOrder(allProductsArray: Array[Product],loggedEmp: String, purchaseOrderArray: Array[PurchaseOrderList]): Unit =
+  def updateInventoryFromPurchaseOrder(allProductsArray: Array[Product],pArray: Array[ProductOrderList],loggedEmp: String, purchaseOrderArray: Array[PurchaseOrderList]): Unit =
   {
     println()
     println("NB Gardens Purchase Orders")
     println()
 
-    if(showPurchaseOrders)
-    {
-      displayPurchaseOrders(purchaseOrderArray,allProductsArray)
-    }
+    displayPurchaseOrders(purchaseOrderArray,pArray, loggedEmp, allProductsArray)
+
     scala.io.StdIn.readLine()
   }
 
-  def displayPurchaseOrders(purchaseOrderArray: Array[PurchaseOrderList],allProds: Array[Product]): Unit =
+  def displayPurchaseOrders(purchaseOrderArray: Array[PurchaseOrderList],pArray: Array[ProductOrderList], loggedEmp: String, allProds: Array[Product]): Unit =
   {
     for ( i <- 0 to (purchaseOrderArray.length - 1))
     {
 
       PurchaseOrderList.purchaseOrderInformation(purchaseOrderArray(i))
-      PurchaseOrderList.getPurchaseOrderProductsAndAmounts(purchaseOrderArray(i),allProds)
 
+      if(showPurchaseOrders) {
+        PurchaseOrderList.getPurchaseOrderProductsAndAmounts(purchaseOrderArray(i), allProds)
+      }
       println()
+
+    }
+
+    println("What would you like to do with these Purchase Orders?")
+    BuildMenu("Add Purchase Order to system.", "Go back to the Stock List!", "Go back to main menu", "Show / Hide Purchase Order details")
+
+    val stockChoice = scala.io.StdIn.readLine()
+
+    stockChoice match {
+      case "1" =>
+        addPurchaseOrder(allProds,pArray,loggedEmp,purchaseOrderArray)
+
+      case "2" => stockManagement(allProds,pArray,loggedEmp,purchaseOrderArray)
+
+      case "3" => informAccounts(purchaseOrderArray)
+        mainMenu(loggedEmp)
+
+      case "4" =>
+        if (showPurchaseOrders) {
+          showPurchaseOrders = false
+        }
+        else {
+          showPurchaseOrders = true
+        }
+        println()
+        updateInventoryFromPurchaseOrder(allProds,pArray,loggedEmp,purchaseOrderArray)
+
+      case _ => println("ERROR ERROR, SYSTEM MELTDOWN. SELF DESTRUCTING IN 5")
+        updateInventoryFromPurchaseOrder(allProds,pArray,loggedEmp,purchaseOrderArray)
+    }
+  }
+
+  def informAccounts(purchaseOrderArray: Array[PurchaseOrderList]): Unit ={
+
+    var found = false
+
+    println("Received Purchase Orders")
+
+    for ( i <- 0 to (purchaseOrderArray.length - 1))
+    {
+      if(PurchaseOrders.findByPOID(purchaseOrderArray(i).purchaseOrderID).get.purchaseOrderStatus == "Received"){
+
+        println("Purchase Order : " + purchaseOrderArray(i).purchaseOrderID)
+
+        found = true
+      }
+
+    }
+    if(found)
+      {
+        println("Send received Purchase Order(s) details to accounts?")
+
+      }
+    else
+    {
+      println("No received Purchase Orders.")
+    }
+  }
+
+  def addPurchaseOrder(allProds: Array[Product],pArray: Array[ProductOrderList],loggedEmp: String,purchaseOrderArray: Array[PurchaseOrderList]): Unit ={
+
+    println("Which Purchase Order would you like to add to the system? Enter the Purchase Order ID")
+    val purchaseOrderChoice = scala.io.StdIn.readLine()
+
+    if(PurchaseOrders.findByPOID(purchaseOrderChoice).isEmpty)
+      {
+        println("Purchase Order ID not found..")
+        updateInventoryFromPurchaseOrder(allProds,pArray,loggedEmp,purchaseOrderArray)
+      }
+    else{
+
+      if(PurchaseOrders.findByPOID(purchaseOrderChoice).get.purchaseOrderStatus == "In Transit")
+        {
+          PurchaseOrderList.increaseStockLevels(PurchaseOrders.findByPOID(purchaseOrderChoice).get,allProds)
+          println()
+          println("Purchase Order Added..")
+          updateInventoryFromPurchaseOrder(allProds,pArray,loggedEmp,purchaseOrderArray)
+        }
+      else{
+
+        println("Purchase Order has already been added to the Inventory system.")
+        updateInventoryFromPurchaseOrder(allProds,pArray,loggedEmp,purchaseOrderArray)
+      }
     }
   }
 
@@ -285,17 +357,17 @@ object Project {
     val productChoice = scala.io.StdIn.readLine()
 
     /**def filter(l1:List[Int], limit:Int) {
-      def process(l2:List[Int]):List[Int] ={
-        if (l2.isEmpty) l2
-        else if (l2.head < limit)
-          l2.head :: process(l2.tail)
-        else
-          process(l2.tail)
-      }
-      println(process(l1))
-    }
-    println(filter(
-      List(1, 9, 2, 8, 3, 7, 4), 5))**/
+      * def process(l2:List[Int]):List[Int] ={
+      * if (l2.isEmpty) l2
+      * else if (l2.head < limit)
+      * l2.head :: process(l2.tail)
+      * else
+      * process(l2.tail)
+      * }
+      * println(process(l1))
+      * }
+      * println(filter(
+      * List(1, 9, 2, 8, 3, 7, 4), 5))**/
 
 
     for( i <- 0 to (productArray.length - 1))
@@ -395,11 +467,9 @@ object Project {
     if (findOrder(input, pArray)) {
 
       println("What would you like to do with this customer order?")
-      println(" 1 - Check out order")
-      println(" 2 - Go back to all orders")
-      println(" 3 - Go back to main menu")
-      println(" 4 - Show / Hide Customer Products")
-      println()
+
+      BuildMenu("Check out order","Go back to all orders","Go back to main menu","Show / Hide Customer Products")
+
       val input2 = scala.io.StdIn.readLine()
       input2 match {
         case "1" => checkoutOrder(input, pArray, loggedEmp)
@@ -453,10 +523,8 @@ object Project {
     }
 
     println("What would you like to do?")
-    println("1 - Open an order")
-    println("2 - Open my checked out orders")
-    println("3 - Go back")
-    println("4 - Show / Hide the Customer Order List")
+
+    BuildMenu("Open an order","Open my checked out orders","Go back","Show / Hide the Customer Order List")
 
     val userChoice = scala.io.StdIn.readLine()
 
@@ -499,42 +567,42 @@ object Project {
   {
     var found = false
 
-    for ( i <- 0 to (pArray.length - 1)) {
+    if(ProductOrderList.findByOrderID(userInput).isEmpty) {
 
-      if (userInput == pArray(i).orderID){
-
-        println("Order " + userInput + " found!")
-        println()
-        found = true
-
-        println("Order ID : " + pArray(i).orderID)
-        println("Customer ID : " + pArray(i).customerID)
-        println("Customer Name : " + pArray(i).customerName)
-        println("Customer Address : " + pArray(i).customerAddress)
-
-        if (showCustomerProducts) {
-            ProductOrderList.getCustomerProducts(pArray(i))
-        }
-
-        if (pArray(i).checkedOutBy == "") {
-          println("Order Checked out : " + pArray(i).checkedOutStatus)
-          println
-        }
-        else {
-          println("Order Checked out by " + pArray(i).checkedOutBy)
-          println()
-        }
-      }
-    }
-
-    if(!found)
-    {
       println("Order ID not found..")
       println()
-      //break = true
-    }
 
-    found
+      found
+    }
+    else {
+
+      println("Order " + userInput + " found!")
+      println()
+      found = true
+
+      val order = ProductOrderList.findByOrderID(userInput)
+      println(order.get.orderID)
+
+      println("Order ID : " + order.get.orderID)
+      println("Customer ID : " + order.get.customerID)
+      println("Customer Name : " +  order.get.customerName)
+      println("Customer Address : " +  order.get.customerAddress)
+
+      if (showCustomerProducts) {
+        ProductOrderList.getCustomerProducts(order.get)
+      }
+
+      if (order.get.checkedOutBy == "") {
+        println("Order Checked out : " + order.get.checkedOutStatus)
+        println
+      }
+      else {
+        println("Order Checked out by " + order.get.checkedOutBy)
+        println()
+      }
+
+      found
+    }
   }
 
   def openCheckedOutOrders(pArray: Array[ProductOrderList],loggedInEmp: String)
@@ -545,20 +613,22 @@ object Project {
 
     var x = 0
 
-    for (i <- 0 to (pArray.length - 1))
-    {
-      if (loggedInEmp == pArray(i).checkedOutBy)
-      {
-        x = x + 1
-        println(x + " - Order ID - " + pArray(i).orderID + " Customer Name - " + pArray(i).customerName)
+    if(ProductOrderList.findByCheckedOutBy(loggedInEmp).isEmpty) {
 
+      println("You have no checked out orders.")
+      println()
+    }
+    else
+    {
+      for (i <- 0 to (pArray.length - 1))
+      {
+        if (loggedInEmp == pArray(i).checkedOutBy)
+        {
+          x = x + 1
+          println(x + " - Order ID - " + pArray(i).orderID + " Customer Name - " + pArray(i).customerName)
+        }
       }
     }
-    if(x == 0)
-    {
-      println("You have no checked out orders.")
-    }
-
     NbGardensOrderList(pArray,loggedInEmp)
   }
 
