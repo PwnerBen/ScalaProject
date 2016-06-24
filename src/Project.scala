@@ -1,5 +1,3 @@
-import com.sun.javafx.image.BytePixelSetter
-
 object Project extends MessageFormating{
 
   def main(args: Array[String]) {
@@ -64,7 +62,7 @@ object Project extends MessageFormating{
 
       case "3" => println("Loading Message System")
         println()
-        stockManagement(productArray,pArray,loggedEmp,purchaseOrderArray)
+        informAccounts(purchaseOrderArray)
 
       case "4" =>
         if (showStockList) {
@@ -133,7 +131,7 @@ object Project extends MessageFormating{
 
       case "2" => stockManagement(allProds,pArray,loggedEmp,purchaseOrderArray)
 
-      case "3" => informAccounts(purchaseOrderArray)
+      case "3" =>
         mainMenu(loggedEmp)
 
       case "4" =>
