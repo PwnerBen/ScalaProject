@@ -8,8 +8,6 @@ object Project extends MessageFormating{
 
   }
 
-
-
   def mainMenu(loggedInEmployee : String): Unit ={
 
     println()
@@ -189,7 +187,7 @@ object Project extends MessageFormating{
           }
           println("All received Purchase Order details have been sent to accounts.")
           println()
-          println("Any button to continue...")
+          println("Enter to continue...")
           scala.io.StdIn.readLine()
           println()
 
@@ -258,7 +256,7 @@ object Project extends MessageFormating{
     if (checkedOrders == 0) {
       println(loggedEmp + ", you do not have any checked orders to decrement the Inventory System.")
       println()
-      println("Any button to continue...")
+      println("Enter to continue...")
       scala.io.StdIn.readLine()
 
       stockManagement(allProductsArray,pArray,loggedEmp,purchaseOrderArray)
@@ -305,7 +303,7 @@ object Project extends MessageFormating{
               found = true
 
               println()
-              println("Any button to continue...")
+              println("Enter to continue...")
               scala.io.StdIn.readLine()
               decrementStockFromCheckedOrders(pArray,loggedEmp,allProductsArray,purchaseOrderArray)
 
@@ -318,7 +316,7 @@ object Project extends MessageFormating{
                 found = true
 
                 println()
-                println("Any button to continue...")
+                println("Enter to continue...")
                 scala.io.StdIn.readLine()
                 decrementStockFromCheckedOrders(pArray,loggedEmp,allProductsArray,purchaseOrderArray)
 
@@ -328,7 +326,7 @@ object Project extends MessageFormating{
                 println("This order has already been decremented from the Inventory System by another warehouse worker.")
                 found = true
                 println()
-                println("Any button to continue...")
+                println("Enter to continue...")
                 scala.io.StdIn.readLine()
                 decrementStockFromCheckedOrders(pArray,loggedEmp,allProductsArray,purchaseOrderArray)
               }
@@ -339,7 +337,7 @@ object Project extends MessageFormating{
               println("You have not checked out this order.")
               found = true
               println()
-              println("Any button to continue...")
+              println("Enter to continue...")
               scala.io.StdIn.readLine()
               decrementStockFromCheckedOrders(pArray,loggedEmp,allProductsArray,purchaseOrderArray)
             }
@@ -353,7 +351,7 @@ object Project extends MessageFormating{
             println("Order not found.")
             //found = false
             println()
-            println("Any button to continue...")
+            println("Enter to continue...")
             scala.io.StdIn.readLine()
             decrementStockFromCheckedOrders(pArray,loggedEmp,allProductsArray,purchaseOrderArray)
           }
@@ -465,31 +463,6 @@ object Project extends MessageFormating{
     }
   }
 
-  /** {
-    *var employeeCorrectPass = false
-    **
- *while(!employeeCorrectPass)
-    *{
-    *println("Please enter your login password.")
-    *println()
- **
- *val employeePassInput = scala.io.StdIn.readLine()
- **
- *if(employeePassInput == whArray(empID).employeePassword)
-      *{
-    *println()
-    *println("Logging you in " + whArray(empID).employeeName +  "!")
-    *println()
-    *employeeCorrectPass = true
-    *}
- **
- *if (employeeCorrectPass == false){
-    *println("Incorrect password..")
-    *}
-    *}
-    *whArray(empID).employeeName
-  *}**/
-
   var break = false
 
   def orderSelection(input : String, pArray : Array[ProductOrderList], loggedEmp : String): Unit =
@@ -568,7 +541,7 @@ object Project extends MessageFormating{
 
     println("What would you like to do?")
 
-    BuildMenu("Open an order","Open my checked out orders","Go back","Show / Hide the Customer Order List","Update checked out customer orders")
+    BuildMenu("Open an order","Open my checked out orders","Go back","Show / Hide the Customer Order List","Update checked out customer orders","Send delivery report to accounts")
 
     val userChoice = scala.io.StdIn.readLine()
 
@@ -596,13 +569,130 @@ object Project extends MessageFormating{
 
       case "5" =>
 
-        updateCustomerOrders(pArray)
+        updateCustomerOrders(pArray,loggedEmp)
+
+      case "6" =>
+
+        msgAccounts(pArray)
+        NbGardensOrderList(pArray,loggedEmp)
 
       case _ => NbGardensOrderList(pArray,loggedEmp)
     }
   }
 
-  def updateCustomerOrders(pArray: Array[ProductOrderList]): Unit =
+  def msgAccounts(pArray: Array[ProductOrderList]): Unit ={
+
+    var x = 0
+
+    def filter(listOrders1: List[ProductOrderList]){
+      def process(listOrder2: List[ProductOrderList]): List[ProductOrderList] ={
+
+        if(listOrder2.isEmpty) listOrder2
+        else if (listOrder2.head.orderStatus == "Delivered" ){
+
+          x = x + 1
+          listOrder2.head :: process(listOrder2.tail)
+        }
+        else
+          process(listOrder2.tail)
+      }
+      process(listOrders1)
+    }
+    filter(ProductOrderList.productOrders.toList)
+
+    if(x > 0) {
+      println()
+      println("Would you like to send a delivery report to accounts Y/N")
+      val input = scala.io.StdIn.readLine()
+
+      if (input == "Y" || input == "y" || input == "yes" || input == "Yes") {
+        println()
+        sendReportToAccounts(pArray)
+        println()
+        println("Enter to continue...")
+        scala.io.StdIn.readLine()
+      }
+      else if (input == "N" || input == "n" || input == "no" || input == "No") {
+
+      }
+    }
+    else
+    {
+      println("There isn't a delivery report to send. Accounts is up to date with all delivered orders..")
+      println("Enter to continue...")
+      scala.io.StdIn.readLine()
+    }
+  }
+
+  def sendReportToAccounts(pArray: Array[ProductOrderList]): Unit ={
+
+    def filter(listOrders1: List[ProductOrderList]){
+      def process(listOrder2: List[ProductOrderList]): List[ProductOrderList] ={
+
+        if(listOrder2.isEmpty) listOrder2
+        else if (listOrder2.head.orderStatus == "Delivered" ){
+
+          println("Customer Order - " + ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderID + " delivery details sent.")
+
+          ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderStatus = "Completed"
+
+          listOrder2.head :: process(listOrder2.tail)
+        }
+        else
+          process(listOrder2.tail)
+      }
+      process(listOrders1)
+    }
+    filter(ProductOrderList.productOrders.toList)
+
+  }
+
+  def updateCustomerOrders(pArray: Array[ProductOrderList],loggedEmp: String): Unit =
+  {
+    var x = 0
+
+    def filter(listOrders1: List[ProductOrderList]){
+      def process(listOrder2: List[ProductOrderList]): List[ProductOrderList] ={
+
+        if(listOrder2.isEmpty) listOrder2
+        else if (listOrder2.head.orderStatus == "Pending" ){
+
+          x = x + 1
+          listOrder2.head :: process(listOrder2.tail)
+        }
+        else
+          process(listOrder2.tail)
+      }
+      process(listOrders1)
+    }
+    filter(ProductOrderList.productOrders.toList)
+
+    if(x > 0) {
+      println()
+      println("Would you like to update your checked out orders from pending to delivered? Y/N")
+      val input = scala.io.StdIn.readLine()
+
+      if (input == "Y" || input == "y" || input == "yes" || input == "Yes") {
+        println()
+        updateToDelivered(pArray)
+        println()
+        println("Enter to continue...")
+        scala.io.StdIn.readLine()
+      }
+      else if (input == "N" || input == "n" || input == "no" || input == "No") {
+
+      }
+    }
+    else
+      {
+        println("You don't have any checked out orders..")
+        println("Enter to continue...")
+        scala.io.StdIn.readLine()
+      }
+    NbGardensOrderList(pArray, loggedEmp)
+  }
+
+  def updateToDelivered(pArray: Array[ProductOrderList]): Unit =
   {
     //wanna loop through customer orders, find if any are pending and change to delivered
 
@@ -692,14 +782,24 @@ object Project extends MessageFormating{
     }
     else
     {
-      for (i <- 0 to (pArray.length - 1))
-      {
-        if (loggedInEmp == pArray(i).checkedOutBy)
-        {
-          x = x + 1
-          println(x + " - Order ID - " + pArray(i).orderID + " Customer Name - " + pArray(i).customerName)
+      def filter(listOrders1: List[ProductOrderList]){
+        def process(listOrder2: List[ProductOrderList]): List[ProductOrderList] ={
+
+          if(listOrder2.isEmpty) listOrder2
+          else if (listOrder2.head.checkedOutBy == loggedInEmp){
+
+            x = x + 1
+            println(x + " - Order ID - " + ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderID + " Customer Name - " + ProductOrderList.findByOrderID(listOrder2.head.orderID).get.customerName)
+
+            listOrder2.head :: process(listOrder2.tail)
+          }
+          else
+            process(listOrder2.tail)
         }
+        process(listOrders1)
       }
+      filter(ProductOrderList.productOrders.toList)
+
     }
     NbGardensOrderList(pArray,loggedInEmp)
   }
@@ -725,7 +825,7 @@ object Project extends MessageFormating{
           println()
           println(loggedInEmp + ", you have already checked out this order..")
           println()
-          println("Any button to continue...")
+          println("Enter to continue...")
           scala.io.StdIn.readLine()
         }
         else
