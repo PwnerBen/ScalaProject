@@ -21,21 +21,21 @@ case class ProductOrderList(override val orderID: String, override val customerI
     def findByCheckedOutBy(checkedOutBy: String) = productOrders.find(_.checkedOutBy == checkedOutBy)
 
     /**val x = orderID
-    val y = customerID
-    val z = customerName
-    val a = customerAddress
-
-      def getOrderID(): String = {
-      x
-    }
-
-    def getCustomerID(): String = {
-      y
-    }
-
-    def getCustomerName(): String = {
-      z
-    }
+      * val y = customerID
+      * val z = customerName
+      * val a = customerAddress
+      **
+      *def getOrderID(): String = {
+      *x
+      * }
+      **
+      *def getCustomerID(): String = {
+      *y
+      * }
+      **
+      *def getCustomerName(): String = {
+      *z
+      *}
       **/
 
     def getOrderID(orderID : String) = productOrders.find(_.orderID == orderID)
@@ -70,13 +70,15 @@ case class ProductOrderList(override val orderID: String, override val customerI
       println
     }
 
-    def decrementStockLevels(productOrderList: ProductOrderList,allProds: Array[Product]): Unit = {
+    def decrementStockLevels(productOrderList: ProductOrderList,allProds: Array[Product]): Boolean = {
 
       /**
         * with the chosen order.
         * get every product and amount
         * for each product remove amount from stock.
         **/
+
+      var enoughStock = true
 
       var allProductsCheck: Array[String] = new Array[String](4)
 
@@ -101,21 +103,46 @@ case class ProductOrderList(override val orderID: String, override val customerI
             productCount(j) = productCount(j) + 1 //for each product it checks how much of each product is in the order
           }
         }
+      }
 
+      for(k <- 0 to allProductsCheck.length - 1)
+      {
+        if((allProds(k).stockLevel - productCount(k)) < 0)
+        {
+          enoughStock = false
+        }
+      }
+      //println("1 enough = " + enoughStock)
+
+      for (j <- 0 to (allProductsCheck.length - 1))
+      {
         if (productCount(j) == 0) {
 
         }
         else if (productCount(j) > 0) {
           println()
 
-          println("Decrementing " + productCount(j) + " " + allProds(j).productName + "'s from the Inventory System.")
+          //println("2 enough = " + enoughStock)
 
-          println("Old stock level - " + allProds(j).stockLevel)
-          allProds(j).stockLevel = allProds(j).stockLevel - productCount(j)
-          println("New stock level - " + allProds(j).stockLevel)
-          println()
+          if(enoughStock){
+
+            println("Decrementing " + productCount(j) + " " + allProds(j).productName + "'s from the Inventory System.")
+
+            println("Old stock level - " + allProds(j).stockLevel)
+            allProds(j).stockLevel = allProds(j).stockLevel - productCount(j)
+            println("New stock level - " + allProds(j).stockLevel)
+            println()
+          }
+          else
+            {
+              if((allProds(j).stockLevel - productCount(j)) < 0)
+              {
+                println("Not enough " + allProds(j).productName + " stock left for this customer order. Please wait for new stock to come in, or add delivered stock to the system.")
+              }
+            }
         }
       }
+      enoughStock
     }
 
     def getProductsAndAmounts(productOrderList: ProductOrderList,allProds: Array[Product]): Unit = {
@@ -159,17 +186,17 @@ case class ProductOrderList(override val orderID: String, override val customerI
     }
 
     /**def getStatus(): Unit = {
-
-      if (checkedOutBy == "") {
-        println("Order Checked out : " + checkedOutStatus)
-        println
-      }
-      else {
-        println("Order Checked out by " + checkedOutBy)
-        println()
-      }
-
-    }**/
+      **
+ *if (checkedOutBy == "") {
+      *println("Order Checked out : " + checkedOutStatus)
+      *println
+      *}
+      *else {
+      *println("Order Checked out by " + checkedOutBy)
+      *println()
+      * }
+      **
+ *}**/
 
 
 

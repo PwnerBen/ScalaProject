@@ -4,11 +4,18 @@
 object ProductOrders {
 
   /** Customers products **/
-  val dagumisProductOrder:Array[Product] = new Array[Product](25)
+  val dagumisProductOrder:Array[Product] = new Array[Product](50)
 
   for ( i <- 0 to (dagumisProductOrder.length - 1))
   {
-    dagumisProductOrder(i) = Product.findById("0001").get
+    if(i < 30)
+      {
+        dagumisProductOrder(i) = Product.findById("0001").get
+      }
+    else
+      {
+        dagumisProductOrder(i) = Product.findById("0002").get
+      }
   }
 
   val keisukesProductOrder:Array[Product] = new Array[Product](25)

@@ -79,6 +79,9 @@ object Project extends MessageFormating{
         productFinder(productArray,pArray,loggedEmp,purchaseOrderArray)
       case "6" => println("Loading porousware options...")
         println()
+        porouswareCheck(purchaseOrderArray,productArray)
+
+        println()
         stockManagement(productArray,pArray,loggedEmp,purchaseOrderArray)
 
       case "7" => println("Loading options...")
@@ -88,6 +91,28 @@ object Project extends MessageFormating{
       case _ => errorMsg(loggedEmp)
         stockManagement(productArray,pArray,loggedEmp,purchaseOrderArray)
     }
+  }
+
+  def porouswareCheck(purchaseOrderArray: Array[PurchaseOrderList], allProds: Array[Product]): Unit =
+  {
+    /**
+      * For each purchase order I want to go through each product see if they need porousware and get the amounts needed.
+      */
+    var found = false
+
+    for(i <- 0 to purchaseOrderArray.length - 1){
+
+      if(purchaseOrderArray(i).purchaseOrderStatus == "Received" || purchaseOrderArray(i).purchaseOrderStatus == "Sent to accounts") {
+        found = true
+        PurchaseOrderList.porouswarePurchaseOrder(purchaseOrderArray(i), allProds)
+      }
+    }
+    if(!found)
+    {
+      println("There are currently no received purchase orders.")
+    }
+    println("Enter to continue...")
+    scala.io.StdIn.readLine()
   }
 
   def sendMessageToAccounts(): Unit =
@@ -119,7 +144,7 @@ object Project extends MessageFormating{
     }
 
     println("What would you like to do with these Purchase Orders?")
-    BuildMenu("Add Purchase Order to system.", "Go back to the Stock List!", "Go back to main menu", "Show / Hide Purchase Order details")
+    BuildMenu("Add Purchase Order to system.", "Go back to the Stock List", "Go back to main menu", "Show / Hide Purchase Order details")
 
     val stockChoice = scala.io.StdIn.readLine()
 
@@ -183,6 +208,7 @@ object Project extends MessageFormating{
 
               println("Purchase Order " + purchaseOrderArray(i).purchaseOrderID + " details sent.")
               println()
+              PurchaseOrders.findByPOID(purchaseOrderArray(i).purchaseOrderID).get.purchaseOrderStatus = "Sent to accounts"
             }
           }
           println("All received Purchase Order details have been sent to accounts.")
@@ -200,8 +226,10 @@ object Project extends MessageFormating{
       }
     else
     {
-      println("No received Purchase Orders.")
+      println("No received Purchase Orders to send to accounts.")
       println()
+      println("Enter to continue...")
+      scala.io.StdIn.readLine()
       stockManagement(productArray,pArray,loggedEmp,purchaseOrderArray)
     }
   }
@@ -214,6 +242,8 @@ object Project extends MessageFormating{
     if(PurchaseOrders.findByPOID(purchaseOrderChoice).isEmpty)
       {
         println("Purchase Order ID not found..")
+        println("Enter to continue...")
+        scala.io.StdIn.readLine()
         updateInventoryFromPurchaseOrder(allProds,pArray,loggedEmp,purchaseOrderArray)
       }
     else{
@@ -223,11 +253,17 @@ object Project extends MessageFormating{
           PurchaseOrderList.increaseStockLevels(PurchaseOrders.findByPOID(purchaseOrderChoice).get,allProds)
           println()
           println("Purchase Order Added..")
+          println()
+          println("Enter to continue...")
+          scala.io.StdIn.readLine()
+
           updateInventoryFromPurchaseOrder(allProds,pArray,loggedEmp,purchaseOrderArray)
         }
       else{
 
         println("Purchase Order has already been added to the Inventory system.")
+        println("Enter to continue...")
+        scala.io.StdIn.readLine()
         updateInventoryFromPurchaseOrder(allProds,pArray,loggedEmp,purchaseOrderArray)
       }
     }
@@ -298,8 +334,9 @@ object Project extends MessageFormating{
               // and if the user input was one of their orders
               //pArray(i).decrementStockLevels(allProductsArray)
 
-              ProductOrderList.decrementStockLevels(pArray(i),allProductsArray) // decrement levels for that product order
-              pArray(i).orderStatus = "Completed"
+              if(ProductOrderList.decrementStockLevels(pArray(i),allProductsArray)){
+                pArray(i).orderStatus = "Packed"
+              }
               found = true
 
               println()
@@ -308,7 +345,7 @@ object Project extends MessageFormating{
               decrementStockFromCheckedOrders(pArray,loggedEmp,allProductsArray,purchaseOrderArray)
 
             }
-            else if(pArray(i).orderStatus == "Completed" && userInputOrderID == pArray(i).orderID)
+            else if(pArray(i).orderStatus == "Packed" && userInputOrderID == pArray(i).orderID)
             {
               if(loggedEmp == pArray(i).checkedOutBy)
               {
@@ -383,20 +420,6 @@ object Project extends MessageFormating{
     println()
 
     val productChoice = scala.io.StdIn.readLine()
-
-    /**def filter(l1:List[Int], limit:Int) {
-      * def process(l2:List[Int]):List[Int] ={
-      * if (l2.isEmpty) l2
-      * else if (l2.head < limit)
-      * l2.head :: process(l2.tail)
-      * else
-      * process(l2.tail)
-      * }
-      * println(process(l1))
-      * }
-      * println(filter(
-      * List(1, 9, 2, 8, 3, 7, 4), 5))**/
-
 
     for( i <- 0 to (productArray.length - 1))
     {
@@ -632,6 +655,10 @@ object Project extends MessageFormating{
         if(listOrder2.isEmpty) listOrder2
         else if (listOrder2.head.orderStatus == "Delivered" ){
 
+          print(Console.GREEN + "Sending")
+          ErrorMsg(2,500,"....")
+          println(Console.RESET)
+
           println("Customer Order - " + ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderID + " delivery details sent.")
 
           ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderStatus = "Completed"
@@ -655,7 +682,7 @@ object Project extends MessageFormating{
       def process(listOrder2: List[ProductOrderList]): List[ProductOrderList] ={
 
         if(listOrder2.isEmpty) listOrder2
-        else if (listOrder2.head.orderStatus == "Pending" ){
+        else if (listOrder2.head.orderStatus == "Packed" ){
 
           x = x + 1
           listOrder2.head :: process(listOrder2.tail)
@@ -669,7 +696,7 @@ object Project extends MessageFormating{
 
     if(x > 0) {
       println()
-      println("Would you like to update your checked out orders from pending to delivered? Y/N")
+      println("Would you like to update your checked out orders from packed to delivered? Y/N")
       val input = scala.io.StdIn.readLine()
 
       if (input == "Y" || input == "y" || input == "yes" || input == "Yes") {
@@ -685,7 +712,7 @@ object Project extends MessageFormating{
     }
     else
       {
-        println("You don't have any checked out orders..")
+        println("You don't have any checked out orders or the products that are on your checked out orders haven't been taken from the inventory system yet.")
         println("Enter to continue...")
         scala.io.StdIn.readLine()
       }
@@ -694,13 +721,13 @@ object Project extends MessageFormating{
 
   def updateToDelivered(pArray: Array[ProductOrderList]): Unit =
   {
-    //wanna loop through customer orders, find if any are pending and change to delivered
+    //wanna loop through customer orders, find if any are packed and change to delivered
 
     def filter(listOrders1: List[ProductOrderList]){
       def process(listOrder2: List[ProductOrderList]): List[ProductOrderList] ={
 
         if(listOrder2.isEmpty) listOrder2
-        else if (listOrder2.head.orderStatus == "Pending" ){
+        else if (listOrder2.head.orderStatus == "Packed" ){
 
           ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderStatus = "Delivered"
 
@@ -732,6 +759,8 @@ object Project extends MessageFormating{
     if(ProductOrderList.findByOrderID(userInput).isEmpty) {
 
       println("Order ID not found..")
+      println("Enter to continue...")
+      scala.io.StdIn.readLine()
       println()
 
       found
