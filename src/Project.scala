@@ -8,6 +8,8 @@ object Project extends MessageFormating{
 
   }
 
+
+
   def mainMenu(loggedInEmployee : String): Unit ={
 
     println()
@@ -28,7 +30,7 @@ object Project extends MessageFormating{
       case "3" => println("Goodbye " + loggedInEmployee + "!")
         //continue = false
 
-      case _ => println("ERROR ERROR, SYSTEM MELTDOWN. SELF DESTRUCTING IN 5")
+      case _ => errorMsg(loggedInEmployee)
         mainMenu(loggedInEmployee)
     }
   }
@@ -60,9 +62,9 @@ object Project extends MessageFormating{
 
         println()
 
-      case "3" => println("Loading Message System")
+      case "3" => println("Loading Message System...")
         println()
-        informAccounts(purchaseOrderArray)
+        informAccounts(productArray,pArray,loggedEmp,purchaseOrderArray)
 
       case "4" =>
         if (showStockList) {
@@ -85,7 +87,7 @@ object Project extends MessageFormating{
         println()
         mainMenu(loggedEmp)
 
-      case _ => println("ERROR ERROR, SYSTEM MELTDOWN. SELF DESTRUCTING IN 5")
+      case _ => errorMsg(loggedEmp)
         stockManagement(productArray,pArray,loggedEmp,purchaseOrderArray)
     }
   }
@@ -102,8 +104,6 @@ object Project extends MessageFormating{
     println()
 
     displayPurchaseOrders(purchaseOrderArray,pArray, loggedEmp, allProductsArray)
-
-    scala.io.StdIn.readLine()
   }
 
   def displayPurchaseOrders(purchaseOrderArray: Array[PurchaseOrderList],pArray: Array[ProductOrderList], loggedEmp: String, allProds: Array[Product]): Unit =
@@ -144,35 +144,67 @@ object Project extends MessageFormating{
         println()
         updateInventoryFromPurchaseOrder(allProds,pArray,loggedEmp,purchaseOrderArray)
 
-      case _ => println("ERROR ERROR, SYSTEM MELTDOWN. SELF DESTRUCTING IN 5")
+      case _ => errorMsg(loggedEmp)
         updateInventoryFromPurchaseOrder(allProds,pArray,loggedEmp,purchaseOrderArray)
     }
   }
 
-  def informAccounts(purchaseOrderArray: Array[PurchaseOrderList]): Unit ={
+  def informAccounts(productArray: Array[Product],pArray: Array[ProductOrderList],loggedEmp: String,purchaseOrderArray: Array[PurchaseOrderList]): Unit ={
 
     var found = false
 
     println("Received Purchase Orders")
+    println()
 
     for ( i <- 0 to (purchaseOrderArray.length - 1))
     {
       if(PurchaseOrders.findByPOID(purchaseOrderArray(i).purchaseOrderID).get.purchaseOrderStatus == "Received"){
 
         println("Purchase Order : " + purchaseOrderArray(i).purchaseOrderID)
-
+        println()
         found = true
       }
 
     }
     if(found)
       {
-        println("Send received Purchase Order(s) details to accounts?")
+        println("Send received Purchase Order(s) details to accounts? Y/N")
 
+        val input = scala.io.StdIn.readLine()
+
+        if(input == "Y" || input == "y" || input == "yes" || input == "Yes")
+        {
+          println()
+          print(Console.GREEN + "Sending")
+          ErrorMsg(2,500,"....")
+          println(Console.RESET)
+
+          for ( i <- 0 to (purchaseOrderArray.length - 1))
+          {
+            if(PurchaseOrders.findByPOID(purchaseOrderArray(i).purchaseOrderID).get.purchaseOrderStatus == "Received"){
+
+              println("Purchase Order " + purchaseOrderArray(i).purchaseOrderID + " details sent.")
+              println()
+            }
+          }
+          println("All received Purchase Order details have been sent to accounts.")
+          println()
+          println("Any button to continue...")
+          scala.io.StdIn.readLine()
+          println()
+
+          stockManagement(productArray,pArray,loggedEmp,purchaseOrderArray)
+        }
+        if(input == "N" || input == "n" || input == "no" || input == "No")
+        {
+          stockManagement(productArray,pArray,loggedEmp,purchaseOrderArray)
+        }
       }
     else
     {
       println("No received Purchase Orders.")
+      println()
+      stockManagement(productArray,pArray,loggedEmp,purchaseOrderArray)
     }
   }
 
@@ -227,7 +259,7 @@ object Project extends MessageFormating{
       println(loggedEmp + ", you do not have any checked orders to decrement the Inventory System.")
       println()
       println("Any button to continue...")
-      val anybutton = scala.io.StdIn.readLine()
+      scala.io.StdIn.readLine()
 
       stockManagement(allProductsArray,pArray,loggedEmp,purchaseOrderArray)
     }
@@ -486,15 +518,29 @@ object Project extends MessageFormating{
             showCustomerProducts = true
           }
           orderSelection(input,pArray,loggedEmp)
+        case _ => errorMsg(loggedEmp)
 
-        case _ => println("ERROR ERROR, SYSTEM MELTDOWN. SELF DESTRUCTING IN 5")
-          orderSelection(input,pArray,loggedEmp)
+      orderSelection(input,pArray,loggedEmp)
       }
     }
     else {
       //openAnOrder(pArray,loggedEmp )
       NbGardensOrderList(pArray,loggedEmp)
     }
+  }
+
+  def errorMsg(loggedEmp:String): Unit =
+  {
+    ErrorMsg(1,70,"ERROR ERROR, SYSTEM MELTDOWN. SELF DESTRUCTING IN")
+    println()
+    ErrorMsg(0,1000,"54321")
+    //ErrorMsg(1,400,"....")
+    println("BOOOOOOOOOM!!")
+    println()
+    ErrorMsg(1,50,"The warehouse has now been destroyed thanks to you inputting something silly. "+
+      "I hope you're proud of yourself... Just look at what you've done " + loggedEmp)
+    println(Console.RESET)
+    Thread.sleep(4000)
   }
 
   def openAnOrder(pArray: Array[ProductOrderList], loggedEmp: String){//: Boolean = {
@@ -522,7 +568,7 @@ object Project extends MessageFormating{
 
     println("What would you like to do?")
 
-    BuildMenu("Open an order","Open my checked out orders","Go back","Show / Hide the Customer Order List")
+    BuildMenu("Open an order","Open my checked out orders","Go back","Show / Hide the Customer Order List","Update checked out customer orders")
 
     val userChoice = scala.io.StdIn.readLine()
 
@@ -548,8 +594,36 @@ object Project extends MessageFormating{
         }
         NbGardensOrderList(pArray,loggedEmp)
 
+      case "5" =>
+
+        updateCustomerOrders(pArray)
+
       case _ => NbGardensOrderList(pArray,loggedEmp)
     }
+  }
+
+  def updateCustomerOrders(pArray: Array[ProductOrderList]): Unit =
+  {
+    //wanna loop through customer orders, find if any are pending and change to delivered
+
+    def filter(listOrders1: List[ProductOrderList]){
+      def process(listOrder2: List[ProductOrderList]): List[ProductOrderList] ={
+
+        if(listOrder2.isEmpty) listOrder2
+        else if (listOrder2.head.orderStatus == "Pending" ){
+
+          ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderStatus = "Delivered"
+
+          println("Customer Order - " + ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderID + ": Status - " + ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderStatus)
+
+          listOrder2.head :: process(listOrder2.tail)
+        }
+        else
+          process(listOrder2.tail)
+      }
+      process(listOrders1)
+    }
+    filter(ProductOrderList.productOrders.toList)
   }
 
   def displayOrders(pArray: Array[ProductOrderList])

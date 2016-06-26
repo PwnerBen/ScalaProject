@@ -1,5 +1,6 @@
 
 trait MessageFormating {
+
   def BuildMenu(items:String*): Unit = {
     println()
     for(i <- 0 to items.length - 1) {
@@ -7,4 +8,38 @@ trait MessageFormating {
     }
     println()
   }
+
+  def ErrorMsg(msgType: Int,time: Int, msg:String): Unit = {
+
+    val len: Int = msg.length()
+
+    val charArray: Array[Char] = new Array[Char](len)
+
+    if(msgType == 1) {
+      for (i <- 0 to charArray.length - 1) {
+        charArray(i) = msg.charAt(i)
+        print(Console.RED + Console.BOLD + charArray(i))
+        Thread.sleep(time)
+      }
+    }
+    else if(msgType == 2)
+    {
+      for (i <- 0 to charArray.length - 1) {
+        charArray(i) = msg.charAt(i)
+        print(Console.GREEN + charArray(i))
+        Thread.sleep(time)
+      }
+    }
+    else
+    {
+      for (i <- 0 to charArray.length - 1) {
+        charArray(i) = msg.charAt(i)
+        println(Console.RED + charArray(i))
+        Thread.sleep(time)
+      }
+    }
+    println()
+  }
+
+
 }

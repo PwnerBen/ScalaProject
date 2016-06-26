@@ -14,7 +14,7 @@ case class ProductOrderList(override val orderID: String, override val customerI
     var productOrders = Array(ProductOrderList("1086", "0001", "Dagumi Fujiwara", "86 Akina, Mount Haruna, Japan",ProductOrders.dagumisProductOrder, false, "", ""),
       ProductOrderList("1007", "0007", "Keisuke Takahashi", "86 Akina, Mount Haruna, Japan", ProductOrders.keisukesProductOrder, false, "", ""),
       ProductOrderList("1791", "0002", "Rytis the Grebe Murderer", "Prison", ProductOrders.rytisProductOrder, false, "", ""),
-      ProductOrderList("1420", "0003", "Snoop Lion", "Bakersfield, CA, USA", ProductOrders.snoopLionsProductOrder, false, "", ""))
+      ProductOrderList("1420", "0003", "Snoop Lion", "Bakersfield, CA, USA", ProductOrders.snoopLionsProductOrder, false, "",""))
 
     def findByOrderID(orderID: String) = productOrders.find(_.orderID == orderID)
 
