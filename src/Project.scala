@@ -1,7 +1,8 @@
 object Project extends MessageFormating{
 
   def main(args: Array[String]) {
-    println("NB GARDENS WAREHOUSE ORDER TRACKING SYSTEM")
+
+    println(Console.GREEN + "NB GARDENS WAREHOUSE ORDER TRACKING SYSTEM" + Console.RESET)
     println()
 
     EmployeeManagement.warehouseLogin()
@@ -17,11 +18,11 @@ object Project extends MessageFormating{
 
     val choiceInput = scala.io.StdIn.readLine()
     choiceInput match {
-      case "1" => println("Loading Orders...")
+      case "1" => println(Console.GREEN + "Loading Orders..." + Console.RESET)
         println()
         NbGardensOrderList(ProductOrderList.productOrders, loggedInEmployee)
 
-      case "2" => println("Loading Stock...")
+      case "2" => println(Console.GREEN + "Loading Stock..." + Console.RESET)
         println()
         stockManagement(AllProducts.arrayOfAllProducts,ProductOrderList.productOrders,loggedInEmployee,PurchaseOrders.purchaseOrders)
 
@@ -50,7 +51,7 @@ object Project extends MessageFormating{
 
   def stockManagement(productArray: Array[Product], pArray: Array[ProductOrderList],loggedEmp: String, purchaseOrderArray: Array[PurchaseOrderList])
   {
-    println("NB Gardens Stock List!")
+    println(Console.GREEN + "NB Gardens Stock List!" + Console.RESET)
     println()
 
     if(showStockList) {
@@ -65,17 +66,17 @@ object Project extends MessageFormating{
     val stockChoice = scala.io.StdIn.readLine()
 
     stockChoice match {
-      case "1" => println("Loading Inventory System...")
+      case "1" => println(Console.GREEN + "Loading Inventory System..." + Console.RESET)
 
         decrementStockFromCheckedOrders(pArray,loggedEmp,productArray,purchaseOrderArray)
 
-      case "2" => println("Loading Inventory System...")
+      case "2" => println(Console.GREEN + "Loading Inventory System..." + Console.RESET)
 
         updateInventoryFromPurchaseOrder(productArray, pArray,loggedEmp,purchaseOrderArray)
 
         println()
 
-      case "3" => println("Loading Message System...")
+      case "3" => println(Console.GREEN + "Loading Message System..." + Console.RESET)
         println()
         informAccounts(productArray,pArray,loggedEmp,purchaseOrderArray)
 
@@ -89,17 +90,17 @@ object Project extends MessageFormating{
         println()
         stockManagement(productArray,pArray,loggedEmp,purchaseOrderArray)
 
-      case "5" => println("Loading Product Finder...")
+      case "5" => println(Console.GREEN + "Loading Product Finder..." + Console.RESET)
         println()
         productFinder(productArray,pArray,loggedEmp,purchaseOrderArray)
-      case "6" => println("Loading porousware options...")
+      case "6" => println(Console.GREEN + "Loading porousware options..." + Console.RESET)
         println()
         porouswareCheck(purchaseOrderArray,productArray)
 
         println()
         stockManagement(productArray,pArray,loggedEmp,purchaseOrderArray)
 
-      case "7" => println("Loading options...")
+      case "7" => println(Console.GREEN + "Loading options..." + Console.RESET)
         println()
         mainMenu(loggedEmp)
 
@@ -133,7 +134,7 @@ object Project extends MessageFormating{
   def updateInventoryFromPurchaseOrder(allProductsArray: Array[Product],pArray: Array[ProductOrderList],loggedEmp: String, purchaseOrderArray: Array[PurchaseOrderList]): Unit =
   {
     println()
-    println("NB Gardens Purchase Orders")
+    println(Console.GREEN + "NB Gardens Purchase Orders" + Console.RESET)
     println()
 
     displayPurchaseOrders(purchaseOrderArray,pArray, loggedEmp, allProductsArray)
@@ -264,7 +265,7 @@ object Project extends MessageFormating{
     {
       if(PurchaseOrders.findByPOID(purchaseOrderArray(i).purchaseOrderID).get.purchaseOrderStatus == "Received"){
 
-        println("Purchase Order : " + purchaseOrderArray(i).purchaseOrderID)
+        println("Purchase Order : " + Console.RED + purchaseOrderArray(i).purchaseOrderID + Console.RESET)
         println()
         found = true
       }
@@ -287,7 +288,7 @@ object Project extends MessageFormating{
           {
             if(PurchaseOrders.findByPOID(purchaseOrderArray(i).purchaseOrderID).get.purchaseOrderStatus == "Received"){
 
-              println("Purchase Order " + purchaseOrderArray(i).purchaseOrderID + " details sent.")
+              println("Purchase Order " + Console.RED +purchaseOrderArray(i).purchaseOrderID + Console.RESET + " details sent.")
               println()
               PurchaseOrders.findByPOID(purchaseOrderArray(i).purchaseOrderID).get.purchaseOrderStatus = "Sent to accounts"
             }
@@ -379,9 +380,9 @@ object Project extends MessageFormating{
       stockManagement(allProductsArray,pArray,loggedEmp,purchaseOrderArray)
     }
     else if (checkedOrders > 0) {
-      println("You have " + checkedOrders + " checked out order(s).")
+      println("You have " +  Console.GREEN + checkedOrders + " checked out order(s)."  + Console.RESET)
       println()
-      println("Total Product Amount from all checked orders - " + totalProductsInCheckedOrders)
+      println("Total Product Amount from all checked orders - " + Console.GREEN + totalProductsInCheckedOrders + Console.RESET)
       println()
 
         println(Console.RED + "Checked out orders.." + Console.RESET)
@@ -389,7 +390,7 @@ object Project extends MessageFormating{
 
         for (i <- 0 to (pArray.length - 1)) {
           if (loggedEmp == pArray(i).checkedOutBy && pArray(i).orderStatus == "Pending") {
-            println("Order " + pArray(i).orderID)
+            println("Order " + Console.RED +pArray(i).orderID + Console.RESET)
             println()
             println("Products")
 
@@ -505,7 +506,7 @@ object Project extends MessageFormating{
     for( i <- 0 to (productArray.length - 1))
     {
       if (productChoice == productArray(i).productName) {
-        println("The " + productArray(i).productName + " is located at section " + productArray(i).productLocation + " of the warehouse.")
+        println("The " + productArray(i).productName + " is located at section " + Console.GREEN +productArray(i).productLocation + Console.RESET + " of the warehouse.")
         println("Warehouse maps can be located at the end of each aisle")
 
         productFound = true
@@ -557,7 +558,7 @@ object Project extends MessageFormating{
   {
     for ( i <- 0 to (productArray.length - 1))
     {
-      println("Product ID : " + productArray(i).productID)
+      println("Product ID : " + Console.RED +  productArray(i).productID + Console.RESET)
       println("Product Name : " + productArray(i).productName)
       println("Product Location : " + productArray(i).productLocation)
       println("Porousware needed : " + productArray(i).porouswareNeeded)
@@ -581,11 +582,11 @@ object Project extends MessageFormating{
       input2 match {
         case "1" => checkoutOrder(input, pArray, loggedEmp)
           orderSelection(input,pArray,loggedEmp)
-        case "2" => println("Loading orders...")
+        case "2" => println(Console.GREEN + "Loading orders..." + Console.RESET)
           println()
           NbGardensOrderList(pArray,loggedEmp)
           //openAnOrder(pArray,loggedEmp)
-        case "3" => println("Loading menu...") //"Goodbye " +  loggedEmp +"!")
+        case "3" => println(Console.GREEN + "Loading menu..." + Console.RESET) //"Goodbye " +  loggedEmp +"!")
           mainMenu(loggedEmp)
         case "4" =>
           if (showCustomerProducts) {
@@ -636,7 +637,7 @@ object Project extends MessageFormating{
   def NbGardensOrderList(pArray: Array[ProductOrderList],loggedEmp: String)
   {
     println
-    println("NB Gardens Order List!")
+    println(Console.GREEN + "NB Gardens Order List!" + Console.RESET)
     println
 
     if(showCustomerOrders){
@@ -748,7 +749,7 @@ object Project extends MessageFormating{
           ErrorMsg(2,500,"....")
           println(Console.RESET)
 
-          println("Customer Order - " + ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderID + " delivery details sent.")
+          println("Customer Order - " + Console.RED + ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderID + Console.RESET + " delivery details sent.")
 
           ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderStatus = "Completed"
 
@@ -824,7 +825,7 @@ object Project extends MessageFormating{
 
           ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderStatus = "Delivered"
 
-          println("Customer Order - " + ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderID + ": Status - " + ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderStatus)
+          println("Customer Order - " + Console.RED + ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderID + Console.RESET + ": Status - " + ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderStatus)
 
           listOrder2.head :: process(listOrder2.tail)
         }
@@ -840,7 +841,7 @@ object Project extends MessageFormating{
   {
     for ( i <- 0 to (pArray.length - 1))
     {
-      println(pArray(i).orderID + " " + pArray(i).customerName)
+      println("Order ID - " + Console.RED + pArray(i).orderID + Console.RESET + " - " + pArray(i).customerName)
       println()
     }
   }
@@ -860,14 +861,14 @@ object Project extends MessageFormating{
     }
     else {
 
-      println("Order " + userInput + " found!")
+      println(Console.GREEN + "Order " + userInput + " found!" + Console.RESET)
       println()
       found = true
 
       val order = ProductOrderList.findByOrderID(userInput)
-      println(order.get.orderID)
+      //println(order.get.orderID)
 
-      println("Order ID : " + order.get.orderID)
+      println("Order ID : " + Console.RED +  order.get.orderID + Console.RESET)
       println("Customer ID : " + order.get.customerID)
       println("Customer Name : " +  order.get.customerName)
       println("Customer Address : " +  order.get.customerAddress)
@@ -881,7 +882,7 @@ object Project extends MessageFormating{
         println
       }
       else {
-        println("Order Checked out by " + order.get.checkedOutBy)
+        println("Order Checked out by " + Console.GREEN +  order.get.checkedOutBy + Console.RESET)
         println()
       }
 
@@ -892,7 +893,7 @@ object Project extends MessageFormating{
   def openCheckedOutOrders(pArray: Array[ProductOrderList],loggedInEmp: String)
   {
     println()
-    println("Checked out orders for " + loggedInEmp)
+    println("Checked out orders for " +  loggedInEmp)
     println()
 
     var x = 0
@@ -911,7 +912,7 @@ object Project extends MessageFormating{
           else if (listOrder2.head.checkedOutBy == loggedInEmp){
 
             x = x + 1
-            println(x + " - Order ID - " + ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderID + " Customer Name - " + ProductOrderList.findByOrderID(listOrder2.head.orderID).get.customerName)
+            println(x + " - Order ID - " + Console.RED + ProductOrderList.findByOrderID(listOrder2.head.orderID).get.orderID + Console.RESET + ", Customer Name - " + ProductOrderList.findByOrderID(listOrder2.head.orderID).get.customerName)
 
             listOrder2.head :: process(listOrder2.tail)
           }
@@ -923,6 +924,8 @@ object Project extends MessageFormating{
       filter(ProductOrderList.productOrders.toList)
 
     }
+    println("Enter to continue...")
+    scala.io.StdIn.readLine()
     NbGardensOrderList(pArray,loggedInEmp)
   }
 

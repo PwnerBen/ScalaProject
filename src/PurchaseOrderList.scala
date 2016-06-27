@@ -43,7 +43,7 @@ case class PurchaseOrderList(val purchaseOrderID: String, val purchasedProducts:
         else if (productCount(j) > 0) {
           println()
 
-          println("Adding " + productCount(j) + " " + allProds(j).productName + "'s to the Inventory System.")
+          println("Adding " + Console.GREEN + productCount(j) + " " + allProds(j).productName + Console.RESET + "'s to the Inventory System.")
 
           println("Old stock level - " + allProds(j).stockLevel)
           allProds(j).stockLevel = allProds(j).stockLevel + productCount(j)
@@ -98,7 +98,7 @@ case class PurchaseOrderList(val purchaseOrderID: String, val purchasedProducts:
           //println("Order " + j)
 
 
-          println("Product ID - " + allProds(j).productID + ", Name - " + allProds(j).productName + ". Amount of " + allProds(j).productName + "'s that need porousware applied - " + productCount(j))
+          println("Product ID - " + Console.RED + allProds(j).productID + Console.RESET + ", Name - " + allProds(j).productName + ". Amount of " + allProds(j).productName + "'s that need porousware applied - " + productCount(j))
           println()
         }
       }
