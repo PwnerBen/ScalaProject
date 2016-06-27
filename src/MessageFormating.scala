@@ -1,6 +1,10 @@
 
 trait MessageFormating {
 
+  /**
+    *   Builds a menu from input strings
+    */
+
   def BuildMenu(items:String*): Unit = {
     println()
     for(i <- 0 to items.length - 1) {
@@ -8,6 +12,10 @@ trait MessageFormating {
     }
     println()
   }
+
+  /**
+    * Prints an error message when someone has input something unexpected
+    */
 
   def ErrorMsg(msgType: Int,time: Int, msg:String): Unit = {
 
@@ -48,8 +56,4 @@ trait MessageFormating {
     }
     println()
   }
-
-
-
-
 }

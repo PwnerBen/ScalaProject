@@ -126,11 +126,6 @@ object Project extends MessageFormating{
     scala.io.StdIn.readLine()
   }
 
-  def sendMessageToAccounts(): Unit =
-  {
-    println("Sending stock list to accounts")
-  }
-
   def updateInventoryFromPurchaseOrder(allProductsArray: Array[Product],pArray: Array[ProductOrderList],loggedEmp: String, purchaseOrderArray: Array[PurchaseOrderList]): Unit =
   {
     println()
@@ -685,6 +680,10 @@ object Project extends MessageFormating{
 
   def msgAccounts(pArray: Array[ProductOrderList]): Unit ={
 
+    /**
+      * Recursion is used here.
+      */
+
     var x = 0
 
     def filter(listOrders1: List[ProductOrderList]){
@@ -729,6 +728,10 @@ object Project extends MessageFormating{
 
   def sendReportToAccounts(pArray: Array[ProductOrderList]): Unit ={
 
+    /**
+      * Recursion is used here.
+      */
+
     def filter(listOrders1: List[ProductOrderList]){
       def process(listOrder2: List[ProductOrderList]): List[ProductOrderList] ={
 
@@ -756,6 +759,10 @@ object Project extends MessageFormating{
 
   def updateCustomerOrders(pArray: Array[ProductOrderList],loggedEmp: String): Unit =
   {
+    /**
+      * Recursion
+      */
+
     var x = 0
 
     def filter(listOrders1: List[ProductOrderList]){
