@@ -30,6 +30,14 @@ trait MessageFormating {
         Thread.sleep(time)
       }
     }
+    else if(msgType == 3)
+    {
+      for (i <- 0 to charArray.length - 1) {
+        charArray(i) = msg.charAt(i)
+        print(Console.CYAN + charArray(i))
+        Thread.sleep(time)
+      }
+    }
     else
     {
       for (i <- 0 to charArray.length - 1) {
@@ -40,6 +48,8 @@ trait MessageFormating {
     }
     println()
   }
+
+
 
 
 }

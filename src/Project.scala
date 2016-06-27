@@ -28,6 +28,17 @@ object Project extends MessageFormating{
       case "3" => println("Goodbye " + loggedInEmployee + "!")
         //continue = false
 
+      case "grebe" => printGrebe2()
+        mainMenu(loggedInEmployee)
+
+      case "grebes" =>    val grebecount = scala.io.StdIn.readLine()
+                          val grebespeed = scala.io.StdIn.readLine()
+                          for (x <- 0 to grebecount.toInt)
+                          {
+                          printGrebe3(3,grebespeed.toInt)
+                          }
+        mainMenu(loggedInEmployee)
+
       case _ => errorMsg(loggedInEmployee)
         mainMenu(loggedInEmployee)
     }
@@ -170,6 +181,75 @@ object Project extends MessageFormating{
       case _ => errorMsg(loggedEmp)
         updateInventoryFromPurchaseOrder(allProds,pArray,loggedEmp,purchaseOrderArray)
     }
+  }
+
+  def printGrebe(): Unit ={
+
+    print(Console.RED + Console.BOLD)
+    println()
+    println("        ,----,")
+    println("   ___.`      `,")
+    println("   `===  D     :")
+    println("     `'.      .'")
+    println("        )    (                   ,")
+    println("       /      \\_________________/|")
+    println("      /                          |")
+    println("     |                           ;")
+    println("     |               _____       /")
+    println("     |      \\       ______7    ,'")
+    println("     |       \\    ______7     /")
+    println("      \\       `-,____7      ,'")
+    println("^~^~^~^`\\                  /~^~^~^~^")
+    println("  ~^~^~^ `----------------' ~^~^~^")
+    println(" ~^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~")
+    println()
+    print(Console.RESET)
+  }
+
+  def printGrebe2(): Unit ={
+
+    println()
+    ErrorMsg(2,25,"        ,----,")
+    ErrorMsg(2,25,"   ___.`      `,")
+    ErrorMsg(2,25,"   `===  D     :")
+    ErrorMsg(2,25,"     `'.      .'")
+    ErrorMsg(2,25,"        )    (                   ,")
+    ErrorMsg(2,25,"       /      \\_________________/|")
+    ErrorMsg(2,25,"      /                          |")
+    ErrorMsg(2,25,"     |                           ;")
+    ErrorMsg(2,25,"     |               _____       /")
+    ErrorMsg(2,25,"     |      \\       ______7    ,'")
+    ErrorMsg(2,25,"     |       \\    ______7     /")
+    ErrorMsg(2,25,"      \\       `-,____7      ,'")
+    ErrorMsg(2,25,"^~^~^~^`\\                  /~^~^~^~^")
+    ErrorMsg(2,25,"  ~^~^~^ `----------------' ~^~^~^")
+    ErrorMsg(2,25," ~^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~")
+    println()
+    print(Console.RESET)
+
+  }
+
+  def printGrebe3(x: Int,y: Int): Unit ={
+
+    println()
+    ErrorMsg(x,y,"        ,----,")
+    ErrorMsg(x,y,"   ___.`      `,")
+    ErrorMsg(x,y,"   `===  D     :")
+    ErrorMsg(x,y,"     `'.      .'")
+    ErrorMsg(x,y,"        )    (                   ,")
+    ErrorMsg(x,y,"       /      \\_________________/|")
+    ErrorMsg(x,y,"      /                          |")
+    ErrorMsg(x,y,"     |                           ;")
+    ErrorMsg(x,y,"     |               _____       /")
+    ErrorMsg(x,y,"     |      \\       ______7    ,'")
+    ErrorMsg(x,y,"     |       \\    ______7     /")
+    ErrorMsg(x,y,"      \\       `-,____7      ,'")
+    ErrorMsg(x,y,"^~^~^~^`\\                  /~^~^~^~^")
+    ErrorMsg(x,y,"  ~^~^~^ `----------------' ~^~^~^")
+    ErrorMsg(x,y," ~^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~")
+    println()
+    print(Console.RESET)
+
   }
 
   def informAccounts(productArray: Array[Product],pArray: Array[ProductOrderList],loggedEmp: String,purchaseOrderArray: Array[PurchaseOrderList]): Unit ={

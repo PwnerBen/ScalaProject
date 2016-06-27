@@ -29,6 +29,11 @@ object EmployeeManagement {
       }
       else
         {
+          println()
+          print(Console.GREEN + "Logging you in")
+          Project.ErrorMsg(2,300,"....")
+          println(Console.RESET)
+
           val employee = tempEmployee
           employee.employeeName
           Project.mainMenu(employee.employeeName)
