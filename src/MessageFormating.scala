@@ -17,7 +17,7 @@ trait MessageFormating {
     * Prints an error message when someone has input something unexpected
     */
 
-  def ErrorMsg(msgType: Int,time: Int, msg:String): Unit = {
+  def ErrorMsg(msgType: Int,time: Double, msg:String): Unit = {
 
     val len: Int = msg.length()
 
@@ -27,7 +27,7 @@ trait MessageFormating {
       for (i <- 0 to charArray.length - 1) {
         charArray(i) = msg.charAt(i)
         print(Console.RED + Console.BOLD + charArray(i))
-        Thread.sleep(time)
+        Thread.sleep(time.toLong)
       }
     }
     else if(msgType == 2)
@@ -35,7 +35,7 @@ trait MessageFormating {
       for (i <- 0 to charArray.length - 1) {
         charArray(i) = msg.charAt(i)
         print(Console.GREEN + charArray(i))
-        Thread.sleep(time)
+        Thread.sleep(time.toLong)
       }
     }
     else if(msgType == 3)
@@ -43,7 +43,7 @@ trait MessageFormating {
       for (i <- 0 to charArray.length - 1) {
         charArray(i) = msg.charAt(i)
         print(Console.CYAN + charArray(i))
-        Thread.sleep(time)
+        Thread.sleep(time.toLong)
       }
     }
     else if(msgType == 4)
@@ -51,7 +51,7 @@ trait MessageFormating {
       for (i <- 0 to charArray.length - 1) {
         charArray(i) = msg.charAt(i)
         print(Console.BLUE + charArray(i))
-        Thread.sleep(time)
+        Thread.sleep(time.toLong)
       }
     }
     else if(msgType == 5)
@@ -59,7 +59,7 @@ trait MessageFormating {
       for (i <- 0 to charArray.length - 1) {
         charArray(i) = msg.charAt(i)
         print(Console.RED + charArray(i))
-        Thread.sleep(time)
+        Thread.sleep(time.toLong)
       }
     }
     else if(msgType == 6)
@@ -67,7 +67,7 @@ trait MessageFormating {
       for (i <- 0 to charArray.length - 1) {
         charArray(i) = msg.charAt(i)
         print(Console.GREEN + charArray(i))
-        Thread.sleep(time)
+        Thread.sleep(time.toLong)
       }
     }
     else if(msgType == 7)
@@ -75,7 +75,7 @@ trait MessageFormating {
       for (i <- 0 to charArray.length - 1) {
         charArray(i) = msg.charAt(i)
         print(Console.MAGENTA + charArray(i))
-        Thread.sleep(time)
+        Thread.sleep(time.toLong)
       }
     }
     else if(msgType == 8)
@@ -83,7 +83,7 @@ trait MessageFormating {
       for (i <- 0 to charArray.length - 1) {
         charArray(i) = msg.charAt(i)
         print(Console.YELLOW + charArray(i))
-        Thread.sleep(time)
+        Thread.sleep(time.toLong)
       }
     }
     else if(msgType == 9)
@@ -91,7 +91,7 @@ trait MessageFormating {
       for (i <- 0 to charArray.length - 1) {
         charArray(i) = msg.charAt(i)
         print(Console.WHITE + charArray(i))
-        Thread.sleep(time)
+        Thread.sleep(time.toLong)
       }
     }
     else
@@ -99,7 +99,7 @@ trait MessageFormating {
       for (i <- 0 to charArray.length - 1) {
         charArray(i) = msg.charAt(i)
         println(Console.RED + charArray(i))
-        Thread.sleep(time)
+        Thread.sleep(time.toLong)
       }
     }
     println()

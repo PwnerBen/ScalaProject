@@ -39,7 +39,7 @@ object Project extends MessageFormating{
                             val rnd = new scala.util.Random
                             val range = 3 to 9
 
-                            printGrebe3(range(rnd.nextInt(range length)),grebespeed.toInt)
+                            printGrebe3(range(rnd.nextInt(range length)),grebespeed.toDouble)
                           }
         mainMenu(loggedInEmployee)
 
@@ -228,7 +228,7 @@ object Project extends MessageFormating{
 
   }
 
-  def printGrebe3(x: Int,y: Int): Unit ={
+  def printGrebe3(x: Int,y: Double): Unit ={
 
     println()
     ErrorMsg(x,y,"        ,----,")
@@ -247,6 +247,8 @@ object Project extends MessageFormating{
     ErrorMsg(x,y,"  ~^~^~^ `----------------' ~^~^~^")
     ErrorMsg(x,y," ~^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~")
     println()
+
+
     print(Console.RESET)
 
   }
