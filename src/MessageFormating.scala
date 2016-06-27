@@ -46,6 +46,54 @@ trait MessageFormating {
         Thread.sleep(time)
       }
     }
+    else if(msgType == 4)
+    {
+      for (i <- 0 to charArray.length - 1) {
+        charArray(i) = msg.charAt(i)
+        print(Console.BLUE + charArray(i))
+        Thread.sleep(time)
+      }
+    }
+    else if(msgType == 5)
+    {
+      for (i <- 0 to charArray.length - 1) {
+        charArray(i) = msg.charAt(i)
+        print(Console.RED + charArray(i))
+        Thread.sleep(time)
+      }
+    }
+    else if(msgType == 6)
+    {
+      for (i <- 0 to charArray.length - 1) {
+        charArray(i) = msg.charAt(i)
+        print(Console.GREEN + charArray(i))
+        Thread.sleep(time)
+      }
+    }
+    else if(msgType == 7)
+    {
+      for (i <- 0 to charArray.length - 1) {
+        charArray(i) = msg.charAt(i)
+        print(Console.MAGENTA + charArray(i))
+        Thread.sleep(time)
+      }
+    }
+    else if(msgType == 8)
+    {
+      for (i <- 0 to charArray.length - 1) {
+        charArray(i) = msg.charAt(i)
+        print(Console.YELLOW + charArray(i))
+        Thread.sleep(time)
+      }
+    }
+    else if(msgType == 9)
+    {
+      for (i <- 0 to charArray.length - 1) {
+        charArray(i) = msg.charAt(i)
+        print(Console.WHITE + charArray(i))
+        Thread.sleep(time)
+      }
+    }
     else
     {
       for (i <- 0 to charArray.length - 1) {

@@ -41,14 +41,4 @@ object ProductOrders {
 
   val individualProductOrders = Array(dagumisProductOrder,keisukesProductOrder,rytisProductOrder,snoopLionsProductOrder)
 
-
-    /**Product.findById("0001").get,
-    Product.findById("0002").get,
-    Product.findById("0003").get,
-    Product.findById("0004").get)**/
-
-
-
-
-
 }

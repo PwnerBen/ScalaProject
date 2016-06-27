@@ -35,7 +35,11 @@ object Project extends MessageFormating{
                           val grebespeed = scala.io.StdIn.readLine()
                           for (x <- 0 to grebecount.toInt)
                           {
-                          printGrebe3(3,grebespeed.toInt)
+
+                            val rnd = new scala.util.Random
+                            val range = 3 to 9
+
+                            printGrebe3(range(rnd.nextInt(range length)),grebespeed.toInt)
                           }
         mainMenu(loggedInEmployee)
 

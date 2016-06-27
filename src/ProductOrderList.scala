@@ -6,11 +6,6 @@ case class ProductOrderList(override val orderID: String, override val customerI
 
   object ProductOrderList {
 
-    /** var productOrders = Seq(productOrders("1086", "0001", "Dagumi Fujiwara", "86 Akina, Mount Haruna, Japan",getCustomerProducts()/**products dagumisProductOrder **/,false,"",""),
-      * productOrders("1007", "0007", "Keisuke Takahashi", "86 Akina, Mount Haruna, Japan",getCustomerProducts()/**products keisukesProductOrder **/,false,"",""),
-      * productOrders("1791", "0002", "Rytis the Grebe Murderer", "Prison",getCustomerProducts()/**products rytisProductOrder **/,false,"",""),
-      * productOrders("1420", "0003", "Snoop Lion", "Bakersfield, CA, USA" ,getCustomerProducts()/**products snoopLionsProductOrder **/,false,"","")) **/
-
     var productOrders = Array(ProductOrderList("1086", "0001", "Dagumi Fujiwara", "86 Akina, Mount Haruna, Japan",ProductOrders.dagumisProductOrder, false, "", ""),
       ProductOrderList("1007", "0007", "Keisuke Takahashi", "86 Akina, Mount Haruna, Japan", ProductOrders.keisukesProductOrder, false, "", ""),
       ProductOrderList("1791", "0002", "Rytis the Grebe Murderer", "Prison", ProductOrders.rytisProductOrder, false, "", ""),
@@ -19,24 +14,6 @@ case class ProductOrderList(override val orderID: String, override val customerI
     def findByOrderID(orderID: String) = productOrders.find(_.orderID == orderID)
 
     def findByCheckedOutBy(checkedOutBy: String) = productOrders.find(_.checkedOutBy == checkedOutBy)
-
-    /**val x = orderID
-      * val y = customerID
-      * val z = customerName
-      * val a = customerAddress
-      **
-      *def getOrderID(): String = {
-      *x
-      * }
-      **
-      *def getCustomerID(): String = {
-      *y
-      * }
-      **
-      *def getCustomerName(): String = {
-      *z
-      *}
-      **/
 
     def getOrderID(orderID : String) = productOrders.find(_.orderID == orderID)
 
@@ -184,25 +161,5 @@ case class ProductOrderList(override val orderID: String, override val customerI
         }
       }
     }
-
-    /**def getStatus(): Unit = {
-      **
- *if (checkedOutBy == "") {
-      *println("Order Checked out : " + checkedOutStatus)
-      *println
-      *}
-      *else {
-      *println("Order Checked out by " + checkedOutBy)
-      *println()
-      * }
-      **
- *}**/
-
-
-
   }
 
-
-  //**/
-
-//}

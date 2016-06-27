@@ -5,8 +5,6 @@ object PurchaseOrders {
 
   /** Array of purchase orders **/
 
-
-
   /** Purchase Order products **/
 
   val purchaseOrderProducts0:Array[Product] = new Array[Product](100)
@@ -44,8 +42,5 @@ object PurchaseOrders {
                              PurchaseOrderList("PO-0004", purchaseOrderProducts3,"£1400", "In Transit"))
 
   def findByPOID(purchaseOrderID: String) = purchaseOrders.find(_.purchaseOrderID == purchaseOrderID)
-
-
-  //val purchaseOrders:Array[PurchaseOrderList] = new Array[PurchaseOrderList](4)
 
 }
